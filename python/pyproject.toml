@@ -1,0 +1,37 @@
+[build-system]
+requires = ["hatchling==1.32.4"]
+build-backend = "hatchling.build"
+
+[project]
+name = "uvd"
+version = "0.1.0"
+description = "Ultravioleta DAO command-line interface: search Emporium, list MCP tools and call free read-only tools."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.9"
+authors = [{ name = "Ultravioleta DAO" }]
+keywords = ["cli", "mcp", "emporium", "ultravioleta", "agents"]
+classifiers = [
+  "Environment :: Console",
+  "Intended Audience :: Developers",
+  "Operating System :: OS Independent",
+  "Programming Language :: JavaScript",
+  "Programming Language :: Python :: 3",
+]
+# The CLI is a Node.js bundle; this wheel brings the Node.js that runs it. Pinned exactly: PyPI
+# files are immutable, so the pin is what reaches the user (a hash pin cannot live in metadata).
+dependencies = ["nodejs-wheel-binaries==24.19.0"]
+
+[project.urls]
+Homepage = "https://github.com/UltravioletaDAO/uvd"
+Repository = "https://github.com/UltravioletaDAO/uvd"
+Issues = "https://github.com/UltravioletaDAO/uvd/issues"
+
+[project.scripts]
+uvd = "uvd._launcher:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/uvd"]
+# Copied in by scripts/build-wheel.mjs from dist/uvd.mjs; git-ignored, so it is listed explicitly.
+artifacts = ["src/uvd/_bundle/uvd.mjs"]

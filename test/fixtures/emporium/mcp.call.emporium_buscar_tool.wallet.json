@@ -1,0 +1,138 @@
+{
+  "endpoint": "/mcp",
+  "request": {
+    "method": "tools/call",
+    "params": {
+      "name": "emporium_buscar_tool",
+      "arguments": {
+        "texto": "wallet",
+        "limite": 50
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "contentType": "application/json",
+    "body": {
+      "jsonrpc": "2.0",
+      "id": 4,
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"aviso\":\"Solo se buscan las tools que un anonimo puede listar. Las superficies de `no_listables` piden credencial y sus tools no estan en el indice.\",\"combos\":[{\"forma\":\"ejecutado\",\"id\":\"CMB-01\",\"nombre\":\"emporium_quien_es\",\"tramo\":\"A\"},{\"forma\":\"ejecutado\",\"id\":\"CMB-06\",\"nombre\":\"emporium_trabajo_para_mi\",\"tramo\":\"A\"},{\"forma\":\"ejecutado\",\"id\":\"CMB-08\",\"nombre\":\"emporium_novedades\",\"tramo\":\"A\"}],\"metodo\":\"subcadena_normalizada\",\"no_listables\":[\"execution-market\",\"meshrelay\"],\"resultados\":[{\"auth_tipo\":\"none\",\"descripcion_corta\":\"El paso 0, y es gratis: si acá no hay nada, no hay nada que comprar. QUÉ DEVUELVE. Por cada cadena donde la wallet tiene\",\"donde\":\"nombre\",\"en_el_mostrador\":\"describe-net_describe_check_wallet\",\"medido_el\":\"2026-09-20\",\"por_que_no\":null,\"superficie_id\":\"describe-net\",\"tool\":\"describe_check_wallet\",\"url_mcp\":\"https://api.describe.net/mcp\"},{\"auth_tipo\":\"none\",\"descripcion_corta\":\"La reputación ERC-8004 de una wallet sumando TODAS las cadenas, en una llamada. QUÉ DEVUELVE. El score final más lo que \",\"donde\":\"nombre\",\"en_el_mostrador\":null,\"medido_el\":\"2026-09-20\",\"por_que_no\":\"cobra_por_llamada\",\"superficie_id\":\"describe-net\",\"tool\":\"describe_lookup_wallet\",\"url_mcp\":\"https://api.describe.net/mcp\"},{\"auth_tipo\":\"none\",\"descripcion_corta\":\"List all pixel blocks owned by a given wallet address (EVM 0x..., Solana, NEAR, Stellar, Sui, etc.).\",\"donde\":\"descripcion\",\"en_el_mostrador\":\"402milly_get_pixels_by_owner\",\"medido_el\":\"2026-09-20\",\"por_que_no\":null,\"superficie_id\":\"402milly\",\"tool\":\"get_pixels_by_owner\",\"url_mcp\":\"https://mcp.402milly.xyz/mcp\"},{\"auth_tipo\":\"none\",\"descripcion_corta\":\"La reputación partida por área, no como un número solo. QUÉ DEVUELVE. Con `wallet`: el score y el volumen de esa wallet \",\"donde\":\"descripcion\",\"en_el_mostrador\":null,\"medido_el\":\"2026-09-20\",\"por_que_no\":\"cobra_por_llamada\",\"superficie_id\":\"describe-net\",\"tool\":\"describe_facets\",\"url_mcp\":\"https://api.describe.net/mcp\"},{\"auth_tipo\":\"none\",\"descripcion_corta\":\"El top del índice, ordenado por evidencia y con el número que lo ordenó a la vista. QUÉ DEVUELVE. Wallet, `final_score` \",\"donde\":\"descripcion\",\"en_el_mostrador\":null,\"medido_el\":\"2026-09-20\",\"por_que_no\":\"cobra_por_llamada\",\"superficie_id\":\"describe-net\",\"tool\":\"describe_leaderboard\",\"url_mcp\":\"https://api.describe.net/mcp\"},{\"auth_tipo\":\"none\",\"descripcion_corta\":\"El OTRO lado del grano: la wallet como EMISOR de calificaciones. QUÉ DEVUELVE. La actividad del calificador, descompuest\",\"donde\":\"descripcion\",\"en_el_mostrador\":null,\"medido_el\":\"2026-09-20\",\"por_que_no\":\"cobra_por_llamada\",\"superficie_id\":\"describe-net\",\"tool\":\"describe_rater_profile\",\"url_mcp\":\"https://api.describe.net/mcp\"},{\"auth_tipo\":\"none\",\"descripcion_corta\":\"Everything the observatory knows about ONE agent — role, wallet, USDC bought/sold/donated/received, how many counterpart\",\"donde\":\"descripcion\",\"en_el_mostrador\":\"karmakadabra_kk_agent\",\"medido_el\":\"2026-09-20\",\"por_que_no\":null,\"superficie_id\":\"karmakadabra\",\"tool\":\"kk_agent\",\"url_mcp\":\"https://karmakadabra.ultravioletadao.xyz/mcp\"}],\"total\":7}"
+          }
+        ],
+        "structuredContent": {
+          "aviso": "Solo se buscan las tools que un anonimo puede listar. Las superficies de `no_listables` piden credencial y sus tools no estan en el indice.",
+          "combos": [
+            {
+              "forma": "ejecutado",
+              "id": "CMB-01",
+              "nombre": "emporium_quien_es",
+              "tramo": "A"
+            },
+            {
+              "forma": "ejecutado",
+              "id": "CMB-06",
+              "nombre": "emporium_trabajo_para_mi",
+              "tramo": "A"
+            },
+            {
+              "forma": "ejecutado",
+              "id": "CMB-08",
+              "nombre": "emporium_novedades",
+              "tramo": "A"
+            }
+          ],
+          "metodo": "subcadena_normalizada",
+          "no_listables": [
+            "execution-market",
+            "meshrelay"
+          ],
+          "resultados": [
+            {
+              "auth_tipo": "none",
+              "descripcion_corta": "El paso 0, y es gratis: si acá no hay nada, no hay nada que comprar. QUÉ DEVUELVE. Por cada cadena donde la wallet tiene",
+              "donde": "nombre",
+              "en_el_mostrador": "describe-net_describe_check_wallet",
+              "medido_el": "2026-09-20",
+              "por_que_no": null,
+              "superficie_id": "describe-net",
+              "tool": "describe_check_wallet",
+              "url_mcp": "https://api.describe.net/mcp"
+            },
+            {
+              "auth_tipo": "none",
+              "descripcion_corta": "La reputación ERC-8004 de una wallet sumando TODAS las cadenas, en una llamada. QUÉ DEVUELVE. El score final más lo que ",
+              "donde": "nombre",
+              "en_el_mostrador": null,
+              "medido_el": "2026-09-20",
+              "por_que_no": "cobra_por_llamada",
+              "superficie_id": "describe-net",
+              "tool": "describe_lookup_wallet",
+              "url_mcp": "https://api.describe.net/mcp"
+            },
+            {
+              "auth_tipo": "none",
+              "descripcion_corta": "List all pixel blocks owned by a given wallet address (EVM 0x..., Solana, NEAR, Stellar, Sui, etc.).",
+              "donde": "descripcion",
+              "en_el_mostrador": "402milly_get_pixels_by_owner",
+              "medido_el": "2026-09-20",
+              "por_que_no": null,
+              "superficie_id": "402milly",
+              "tool": "get_pixels_by_owner",
+              "url_mcp": "https://mcp.402milly.xyz/mcp"
+            },
+            {
+              "auth_tipo": "none",
+              "descripcion_corta": "La reputación partida por área, no como un número solo. QUÉ DEVUELVE. Con `wallet`: el score y el volumen de esa wallet ",
+              "donde": "descripcion",
+              "en_el_mostrador": null,
+              "medido_el": "2026-09-20",
+              "por_que_no": "cobra_por_llamada",
+              "superficie_id": "describe-net",
+              "tool": "describe_facets",
+              "url_mcp": "https://api.describe.net/mcp"
+            },
+            {
+              "auth_tipo": "none",
+              "descripcion_corta": "El top del índice, ordenado por evidencia y con el número que lo ordenó a la vista. QUÉ DEVUELVE. Wallet, `final_score` ",
+              "donde": "descripcion",
+              "en_el_mostrador": null,
+              "medido_el": "2026-09-20",
+              "por_que_no": "cobra_por_llamada",
+              "superficie_id": "describe-net",
+              "tool": "describe_leaderboard",
+              "url_mcp": "https://api.describe.net/mcp"
+            },
+            {
+              "auth_tipo": "none",
+              "descripcion_corta": "El OTRO lado del grano: la wallet como EMISOR de calificaciones. QUÉ DEVUELVE. La actividad del calificador, descompuest",
+              "donde": "descripcion",
+              "en_el_mostrador": null,
+              "medido_el": "2026-09-20",
+              "por_que_no": "cobra_por_llamada",
+              "superficie_id": "describe-net",
+              "tool": "describe_rater_profile",
+              "url_mcp": "https://api.describe.net/mcp"
+            },
+            {
+              "auth_tipo": "none",
+              "descripcion_corta": "Everything the observatory knows about ONE agent — role, wallet, USDC bought/sold/donated/received, how many counterpart",
+              "donde": "descripcion",
+              "en_el_mostrador": "karmakadabra_kk_agent",
+              "medido_el": "2026-09-20",
+              "por_que_no": null,
+              "superficie_id": "karmakadabra",
+              "tool": "kk_agent",
+              "url_mcp": "https://karmakadabra.ultravioletadao.xyz/mcp"
+            }
+          ],
+          "total": 7
+        },
+        "isError": false
+      }
+    }
+  }
+}

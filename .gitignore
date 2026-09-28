@@ -1,0 +1,8 @@
+node_modules/
+dist/
+*.tgz
+python/LICENSE
+python/src/uvd/_bundle/
+__pycache__/
+*.pyc
+.venv/

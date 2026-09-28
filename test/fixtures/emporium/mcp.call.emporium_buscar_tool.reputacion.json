@@ -1,0 +1,107 @@
+{
+  "endpoint": "/mcp",
+  "request": {
+    "method": "tools/call",
+    "params": {
+      "name": "emporium_buscar_tool",
+      "arguments": {
+        "texto": "reputacion",
+        "limite": 50
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "contentType": "application/json",
+    "body": {
+      "jsonrpc": "2.0",
+      "id": 3,
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"aviso\":\"Solo se buscan las tools que un anonimo puede listar. Las superficies de `no_listables` piden credencial y sus tools no estan en el indice.\",\"combos\":[{\"forma\":\"ejecutado\",\"id\":\"CMB-01\",\"nombre\":\"emporium_quien_es\",\"tramo\":\"A\"},{\"forma\":\"ejecutado\",\"id\":\"CMB-02\",\"nombre\":\"emporium_redes_de_cobro\",\"tramo\":\"A\"},{\"forma\":\"puro\",\"id\":\"CMB-04\",\"nombre\":\"emporium_paquete\",\"tramo\":\"C\"},{\"forma\":\"ejecutado\",\"id\":\"CMB-06\",\"nombre\":\"emporium_trabajo_para_mi\",\"tramo\":\"A\"},{\"forma\":\"plan\",\"id\":\"CMB-09\",\"nombre\":\"emporium_plan_vecindario\",\"tramo\":\"A\"},{\"forma\":\"plan\",\"id\":\"CMB-11\",\"nombre\":\"emporium_plan_antes_de_asignar\",\"tramo\":\"C\"},{\"forma\":\"plan\",\"id\":\"CMB-23\",\"nombre\":\"emporium_plan_relevo\",\"tramo\":\"D\"}],\"metodo\":\"subcadena_normalizada\",\"no_listables\":[\"execution-market\",\"meshrelay\"],\"resultados\":[{\"auth_tipo\":\"none\",\"descripcion_corta\":\"La reputación partida por área, no como un número solo. QUÉ DEVUELVE. Con `wallet`: el score y el volumen de esa wallet \",\"donde\":\"descripcion\",\"en_el_mostrador\":null,\"medido_el\":\"2026-09-20\",\"por_que_no\":\"cobra_por_llamada\",\"superficie_id\":\"describe-net\",\"tool\":\"describe_facets\",\"url_mcp\":\"https://api.describe.net/mcp\"},{\"auth_tipo\":\"none\",\"descripcion_corta\":\"La reputación ERC-8004 de una wallet sumando TODAS las cadenas, en una llamada. QUÉ DEVUELVE. El score final más lo que \",\"donde\":\"descripcion\",\"en_el_mostrador\":null,\"medido_el\":\"2026-09-20\",\"por_que_no\":\"cobra_por_llamada\",\"superficie_id\":\"describe-net\",\"tool\":\"describe_lookup_wallet\",\"url_mcp\":\"https://api.describe.net/mcp\"}],\"total\":2}"
+          }
+        ],
+        "structuredContent": {
+          "aviso": "Solo se buscan las tools que un anonimo puede listar. Las superficies de `no_listables` piden credencial y sus tools no estan en el indice.",
+          "combos": [
+            {
+              "forma": "ejecutado",
+              "id": "CMB-01",
+              "nombre": "emporium_quien_es",
+              "tramo": "A"
+            },
+            {
+              "forma": "ejecutado",
+              "id": "CMB-02",
+              "nombre": "emporium_redes_de_cobro",
+              "tramo": "A"
+            },
+            {
+              "forma": "puro",
+              "id": "CMB-04",
+              "nombre": "emporium_paquete",
+              "tramo": "C"
+            },
+            {
+              "forma": "ejecutado",
+              "id": "CMB-06",
+              "nombre": "emporium_trabajo_para_mi",
+              "tramo": "A"
+            },
+            {
+              "forma": "plan",
+              "id": "CMB-09",
+              "nombre": "emporium_plan_vecindario",
+              "tramo": "A"
+            },
+            {
+              "forma": "plan",
+              "id": "CMB-11",
+              "nombre": "emporium_plan_antes_de_asignar",
+              "tramo": "C"
+            },
+            {
+              "forma": "plan",
+              "id": "CMB-23",
+              "nombre": "emporium_plan_relevo",
+              "tramo": "D"
+            }
+          ],
+          "metodo": "subcadena_normalizada",
+          "no_listables": [
+            "execution-market",
+            "meshrelay"
+          ],
+          "resultados": [
+            {
+              "auth_tipo": "none",
+              "descripcion_corta": "La reputación partida por área, no como un número solo. QUÉ DEVUELVE. Con `wallet`: el score y el volumen de esa wallet ",
+              "donde": "descripcion",
+              "en_el_mostrador": null,
+              "medido_el": "2026-09-20",
+              "por_que_no": "cobra_por_llamada",
+              "superficie_id": "describe-net",
+              "tool": "describe_facets",
+              "url_mcp": "https://api.describe.net/mcp"
+            },
+            {
+              "auth_tipo": "none",
+              "descripcion_corta": "La reputación ERC-8004 de una wallet sumando TODAS las cadenas, en una llamada. QUÉ DEVUELVE. El score final más lo que ",
+              "donde": "descripcion",
+              "en_el_mostrador": null,
+              "medido_el": "2026-09-20",
+              "por_que_no": "cobra_por_llamada",
+              "superficie_id": "describe-net",
+              "tool": "describe_lookup_wallet",
+              "url_mcp": "https://api.describe.net/mcp"
+            }
+          ],
+          "total": 2
+        },
+        "isError": false
+      }
+    }
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "endpoint": "/mcp",
+  "request": {
+    "method": "tools/call",
+    "params": {
+      "name": "emporium_buscar_tool",
+      "arguments": {
+        "texto": "get_grid_metadata",
+        "limite": 50
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "contentType": "application/json",
+    "body": {
+      "jsonrpc": "2.0",
+      "id": 9,
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"aviso\":\"Solo se buscan las tools que un anonimo puede listar. Las superficies de `no_listables` piden credencial y sus tools no estan en el indice.\",\"combos\":[],\"metodo\":\"subcadena_normalizada\",\"no_listables\":[\"execution-market\",\"meshrelay\"],\"resultados\":[{\"auth_tipo\":\"none\",\"descripcion_corta\":\"Get the 402milly pixel grid configuration and live stats: dimensions, tile layout, total pixels, and pixels sold.\",\"donde\":\"nombre\",\"en_el_mostrador\":\"402milly_get_grid_metadata\",\"medido_el\":\"2026-09-20\",\"por_que_no\":null,\"superficie_id\":\"402milly\",\"tool\":\"get_grid_metadata\",\"url_mcp\":\"https://mcp.402milly.xyz/mcp\"}],\"total\":1}"
+          }
+        ],
+        "structuredContent": {
+          "aviso": "Solo se buscan las tools que un anonimo puede listar. Las superficies de `no_listables` piden credencial y sus tools no estan en el indice.",
+          "combos": [],
+          "metodo": "subcadena_normalizada",
+          "no_listables": [
+            "execution-market",
+            "meshrelay"
+          ],
+          "resultados": [
+            {
+              "auth_tipo": "none",
+              "descripcion_corta": "Get the 402milly pixel grid configuration and live stats: dimensions, tile layout, total pixels, and pixels sold.",
+              "donde": "nombre",
+              "en_el_mostrador": "402milly_get_grid_metadata",
+              "medido_el": "2026-09-20",
+              "por_que_no": null,
+              "superficie_id": "402milly",
+              "tool": "get_grid_metadata",
+              "url_mcp": "https://mcp.402milly.xyz/mcp"
+            }
+          ],
+          "total": 1
+        },
+        "isError": false
+      }
+    }
+  }
+}
