@@ -1,0 +1,35 @@
+{
+  "endpoint": "/mcp",
+  "request": {
+    "method": "initialize",
+    "params": {
+      "protocolVersion": "2025-11-25",
+      "capabilities": {},
+      "clientInfo": {
+        "name": "uvd",
+        "version": "0.1.0"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "contentType": "application/json",
+    "body": {
+      "jsonrpc": "2.0",
+      "id": 1,
+      "result": {
+        "protocolVersion": "2025-11-25",
+        "capabilities": {
+          "tools": {}
+        },
+        "serverInfo": {
+          "name": "emporium",
+          "title": "Emporium",
+          "version": "422bc6730ef9910ccc85057f675b7eeb05fdb1c4",
+          "description": "los instrumentos comunes para agentes, con mandato y límites",
+          "websiteUrl": "https://emporium.ultravioletadao.xyz"
+        }
+      }
+    }
+  }
+}

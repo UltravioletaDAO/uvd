@@ -1,0 +1,162 @@
+{
+  "endpoint": "/mostrador/mcp",
+  "request": {
+    "method": "tools/call",
+    "params": {
+      "name": "emporium_superficies",
+      "arguments": {}
+    }
+  },
+  "response": {
+    "status": 200,
+    "contentType": "application/json",
+    "body": {
+      "jsonrpc": "2.0",
+      "id": 8,
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"aviso\":\"Cifras del 2026-09-20. Re-medilas al llegar: una superficie puede haber cambiado.\",\"combos\":11,\"mostrador_url\":\"https://emporium.ultravioletadao.xyz/mostrador/mcp\",\"snapshot_generado_el\":\"2026-09-20T04:30:00Z\",\"superficies\":[{\"alcanzable\":true,\"auth\":{\"notas\":\"200 sin credencial. Medido 2026-09-20.\",\"prm_url\":\"\",\"tipo\":\"none\"},\"fuente\":\"censo mecanico 2026-09-20 + informe 04 de superficies\",\"id\":\"402milly\",\"medido_el\":\"2026-09-20\",\"mueve_dinero\":true,\"nombre\":\"402milly (mercado de pixeles)\",\"probable_gratis\":true,\"reenviadas\":5,\"tools_conocidas\":6,\"url_api\":\"\",\"url_mcp\":\"https://mcp.402milly.xyz/mcp\"},{\"alcanzable\":true,\"auth\":{\"notas\":\"200 sin credencial. Medido 2026-09-20.\",\"prm_url\":\"\",\"tipo\":\"none\"},\"fuente\":\"censo mecanico 2026-09-20 + informe 03 de superficies\",\"id\":\"describe-net\",\"medido_el\":\"2026-09-20\",\"mueve_dinero\":true,\"nombre\":\"describe.net (reputacion ERC-8004)\",\"probable_gratis\":true,\"reenviadas\":9,\"tools_conocidas\":15,\"url_api\":\"https://api.describe.net\",\"url_mcp\":\"https://api.describe.net/mcp\"},{\"alcanzable\":true,\"auth\":{\"notas\":\"el servidor de autorizacion soporta solo authorization_code y refresh_token con PKCE S256; no hay client_credentials ni token-exchange. Medido 2026-09-20.\",\"prm_url\":\"https://mcp.execution.market/.well-known/oauth-protected-resource/mcp\",\"tipo\":\"oauth2.1\"},\"fuente\":\"censo mecanico 2026-09-20 + informe 02 de superficies\",\"id\":\"execution-market\",\"medido_el\":\"2026-09-20\",\"mueve_dinero\":true,\"nombre\":\"Execution Market (mercado de tareas)\",\"probable_gratis\":false,\"reenviadas\":0,\"tools_conocidas\":null,\"url_api\":\"https://api.execution.market\",\"url_mcp\":\"https://mcp.execution.market/mcp/\"},{\"alcanzable\":true,\"auth\":{\"notas\":\"200 sin credencial. Medido 2026-09-20.\",\"prm_url\":\"\",\"tipo\":\"none\"},\"fuente\":\"censo mecanico 2026-09-20 + informe 04 de superficies\",\"id\":\"facilitador\",\"medido_el\":\"2026-09-20\",\"mueve_dinero\":true,\"nombre\":\"Facilitador x402 (x402-rs)\",\"probable_gratis\":true,\"reenviadas\":1,\"tools_conocidas\":4,\"url_api\":\"https://facilitator.ultravioletadao.xyz\",\"url_mcp\":\"https://facilitator.ultravioletadao.xyz/mcp\"},{\"alcanzable\":true,\"auth\":{\"notas\":\"200 sin credencial. Medido 2026-09-20.\",\"prm_url\":\"\",\"tipo\":\"none\"},\"fuente\":\"censo mecanico 2026-09-20 + informe 04 de superficies\",\"id\":\"karmakadabra\",\"medido_el\":\"2026-09-20\",\"mueve_dinero\":false,\"nombre\":\"KarmaKadabra (observatorio)\",\"probable_gratis\":true,\"reenviadas\":6,\"tools_conocidas\":6,\"url_api\":\"\",\"url_mcp\":\"https://karmakadabra.ultravioletadao.xyz/mcp\"},{\"alcanzable\":true,\"auth\":{\"notas\":\"el nonce se pide por GET, no por POST; validez maxima 300 s; cadena 8453. Alternativa: API key en el header X-Mcp-Api-Key. Medido 2026-09-20.\",\"prm_url\":\"\",\"tipo\":\"erc8128\"},\"fuente\":\"censo mecanico 2026-09-20 + informe 03 de superficies\",\"id\":\"meshrelay\",\"medido_el\":\"2026-09-20\",\"mueve_dinero\":true,\"nombre\":\"MeshRelay (IRC para agentes)\",\"probable_gratis\":false,\"reenviadas\":0,\"tools_conocidas\":null,\"url_api\":\"https://api.meshrelay.xyz\",\"url_mcp\":\"https://api.meshrelay.xyz/mcp\"},{\"alcanzable\":true,\"auth\":{\"notas\":\"200 sin credencial. Medido 2026-09-20.\",\"prm_url\":\"\",\"tipo\":\"none\"},\"fuente\":\"censo mecanico 2026-09-20 + informe 04 de superficies\",\"id\":\"ultravioletadao\",\"medido_el\":\"2026-09-20\",\"mueve_dinero\":false,\"nombre\":\"UltravioletaDAO (datos de la DAO y del ecosistema)\",\"probable_gratis\":true,\"reenviadas\":12,\"tools_conocidas\":13,\"url_api\":\"\",\"url_mcp\":\"https://api.ultravioletadao.xyz/mcp\"}],\"total\":7}"
+          }
+        ],
+        "structuredContent": {
+          "aviso": "Cifras del 2026-09-20. Re-medilas al llegar: una superficie puede haber cambiado.",
+          "combos": 11,
+          "mostrador_url": "https://emporium.ultravioletadao.xyz/mostrador/mcp",
+          "snapshot_generado_el": "2026-09-20T04:30:00Z",
+          "superficies": [
+            {
+              "alcanzable": true,
+              "auth": {
+                "notas": "200 sin credencial. Medido 2026-09-20.",
+                "prm_url": "",
+                "tipo": "none"
+              },
+              "fuente": "censo mecanico 2026-09-20 + informe 04 de superficies",
+              "id": "402milly",
+              "medido_el": "2026-09-20",
+              "mueve_dinero": true,
+              "nombre": "402milly (mercado de pixeles)",
+              "probable_gratis": true,
+              "reenviadas": 5,
+              "tools_conocidas": 6,
+              "url_api": "",
+              "url_mcp": "https://mcp.402milly.xyz/mcp"
+            },
+            {
+              "alcanzable": true,
+              "auth": {
+                "notas": "200 sin credencial. Medido 2026-09-20.",
+                "prm_url": "",
+                "tipo": "none"
+              },
+              "fuente": "censo mecanico 2026-09-20 + informe 03 de superficies",
+              "id": "describe-net",
+              "medido_el": "2026-09-20",
+              "mueve_dinero": true,
+              "nombre": "describe.net (reputacion ERC-8004)",
+              "probable_gratis": true,
+              "reenviadas": 9,
+              "tools_conocidas": 15,
+              "url_api": "https://api.describe.net",
+              "url_mcp": "https://api.describe.net/mcp"
+            },
+            {
+              "alcanzable": true,
+              "auth": {
+                "notas": "el servidor de autorizacion soporta solo authorization_code y refresh_token con PKCE S256; no hay client_credentials ni token-exchange. Medido 2026-09-20.",
+                "prm_url": "https://mcp.execution.market/.well-known/oauth-protected-resource/mcp",
+                "tipo": "oauth2.1"
+              },
+              "fuente": "censo mecanico 2026-09-20 + informe 02 de superficies",
+              "id": "execution-market",
+              "medido_el": "2026-09-20",
+              "mueve_dinero": true,
+              "nombre": "Execution Market (mercado de tareas)",
+              "probable_gratis": false,
+              "reenviadas": 0,
+              "tools_conocidas": null,
+              "url_api": "https://api.execution.market",
+              "url_mcp": "https://mcp.execution.market/mcp/"
+            },
+            {
+              "alcanzable": true,
+              "auth": {
+                "notas": "200 sin credencial. Medido 2026-09-20.",
+                "prm_url": "",
+                "tipo": "none"
+              },
+              "fuente": "censo mecanico 2026-09-20 + informe 04 de superficies",
+              "id": "facilitador",
+              "medido_el": "2026-09-20",
+              "mueve_dinero": true,
+              "nombre": "Facilitador x402 (x402-rs)",
+              "probable_gratis": true,
+              "reenviadas": 1,
+              "tools_conocidas": 4,
+              "url_api": "https://facilitator.ultravioletadao.xyz",
+              "url_mcp": "https://facilitator.ultravioletadao.xyz/mcp"
+            },
+            {
+              "alcanzable": true,
+              "auth": {
+                "notas": "200 sin credencial. Medido 2026-09-20.",
+                "prm_url": "",
+                "tipo": "none"
+              },
+              "fuente": "censo mecanico 2026-09-20 + informe 04 de superficies",
+              "id": "karmakadabra",
+              "medido_el": "2026-09-20",
+              "mueve_dinero": false,
+              "nombre": "KarmaKadabra (observatorio)",
+              "probable_gratis": true,
+              "reenviadas": 6,
+              "tools_conocidas": 6,
+              "url_api": "",
+              "url_mcp": "https://karmakadabra.ultravioletadao.xyz/mcp"
+            },
+            {
+              "alcanzable": true,
+              "auth": {
+                "notas": "el nonce se pide por GET, no por POST; validez maxima 300 s; cadena 8453. Alternativa: API key en el header X-Mcp-Api-Key. Medido 2026-09-20.",
+                "prm_url": "",
+                "tipo": "erc8128"
+              },
+              "fuente": "censo mecanico 2026-09-20 + informe 03 de superficies",
+              "id": "meshrelay",
+              "medido_el": "2026-09-20",
+              "mueve_dinero": true,
+              "nombre": "MeshRelay (IRC para agentes)",
+              "probable_gratis": false,
+              "reenviadas": 0,
+              "tools_conocidas": null,
+              "url_api": "https://api.meshrelay.xyz",
+              "url_mcp": "https://api.meshrelay.xyz/mcp"
+            },
+            {
+              "alcanzable": true,
+              "auth": {
+                "notas": "200 sin credencial. Medido 2026-09-20.",
+                "prm_url": "",
+                "tipo": "none"
+              },
+              "fuente": "censo mecanico 2026-09-20 + informe 04 de superficies",
+              "id": "ultravioletadao",
+              "medido_el": "2026-09-20",
+              "mueve_dinero": false,
+              "nombre": "UltravioletaDAO (datos de la DAO y del ecosistema)",
+              "probable_gratis": true,
+              "reenviadas": 12,
+              "tools_conocidas": 13,
+              "url_api": "",
+              "url_mcp": "https://api.ultravioletadao.xyz/mcp"
+            }
+          ],
+          "total": 7
+        },
+        "isError": false
+      }
+    }
+  }
+}

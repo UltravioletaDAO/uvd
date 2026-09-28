@@ -1,0 +1,55 @@
+{
+  "derivedFrom": "emporium/mcp.call.emporium_buscar_tool.lookup_wallet.json",
+  "why": "emporium_buscar_tool is a normalized substring search. The recorded answer for \"lookup_wallet\" has exactly one result, describe-net/describe_lookup_wallet, matched by name, and no combos; the answer for \"describe_lookup_wallet\" is that same result and nothing else. Only request.params.arguments.texto differs from the recorded file; the response is copied byte for byte. Used only by the tests of the uvd call refusal, never by the delivery criteria.",
+  "endpoint": "/mcp",
+  "request": {
+    "method": "tools/call",
+    "params": {
+      "name": "emporium_buscar_tool",
+      "arguments": {
+        "texto": "describe_lookup_wallet",
+        "limite": 50
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "contentType": "application/json",
+    "body": {
+      "jsonrpc": "2.0",
+      "id": 10,
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"aviso\":\"Solo se buscan las tools que un anonimo puede listar. Las superficies de `no_listables` piden credencial y sus tools no estan en el indice.\",\"combos\":[],\"metodo\":\"subcadena_normalizada\",\"no_listables\":[\"execution-market\",\"meshrelay\"],\"resultados\":[{\"auth_tipo\":\"none\",\"descripcion_corta\":\"La reputación ERC-8004 de una wallet sumando TODAS las cadenas, en una llamada. QUÉ DEVUELVE. El score final más lo que \",\"donde\":\"nombre\",\"en_el_mostrador\":null,\"medido_el\":\"2026-09-20\",\"por_que_no\":\"cobra_por_llamada\",\"superficie_id\":\"describe-net\",\"tool\":\"describe_lookup_wallet\",\"url_mcp\":\"https://api.describe.net/mcp\"}],\"total\":1}"
+          }
+        ],
+        "structuredContent": {
+          "aviso": "Solo se buscan las tools que un anonimo puede listar. Las superficies de `no_listables` piden credencial y sus tools no estan en el indice.",
+          "combos": [],
+          "metodo": "subcadena_normalizada",
+          "no_listables": [
+            "execution-market",
+            "meshrelay"
+          ],
+          "resultados": [
+            {
+              "auth_tipo": "none",
+              "descripcion_corta": "La reputación ERC-8004 de una wallet sumando TODAS las cadenas, en una llamada. QUÉ DEVUELVE. El score final más lo que ",
+              "donde": "nombre",
+              "en_el_mostrador": null,
+              "medido_el": "2026-09-20",
+              "por_que_no": "cobra_por_llamada",
+              "superficie_id": "describe-net",
+              "tool": "describe_lookup_wallet",
+              "url_mcp": "https://api.describe.net/mcp"
+            }
+          ],
+          "total": 1
+        },
+        "isError": false
+      }
+    }
+  }
+}

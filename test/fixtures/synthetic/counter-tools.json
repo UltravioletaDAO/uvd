@@ -1,0 +1,31 @@
+{
+  "note": "Hand-written, not recorded. Tools the fixture server can append to the counter's recorded tools/list, to test that `uvd call` refuses before calling. `paidForwarded` carries the counter's own read-only annotations (as every forwarded tool does) while the catalog classifies describe-net/describe_lookup_wallet as cobra_por_llamada: the catalog class must win. `notReadOnly` and `takesPayment` have no catalog entry, so only their annotations and input schema decide.",
+  "paidForwarded": {
+    "name": "describe-net_describe_lookup_wallet",
+    "description": "Synthetic counter entry for a tool the catalog classifies as paid.",
+    "inputSchema": { "type": "object", "properties": { "wallet": { "type": "string" } } },
+    "annotations": { "readOnlyHint": true, "destructiveHint": false, "openWorldHint": true },
+    "_meta": {
+      "emporium/superficie": "describe-net",
+      "emporium/tool": "describe_lookup_wallet",
+      "emporium/url_mcp_directa": "https://api.describe.net/mcp",
+      "emporium/anotaciones_de_la_superficie": { "readOnlyHint": true }
+    }
+  },
+  "notReadOnly": {
+    "name": "emporium_fixture_writer",
+    "description": "Synthetic house tool whose annotations say it writes.",
+    "inputSchema": { "type": "object", "properties": {} },
+    "annotations": { "readOnlyHint": false, "destructiveHint": false }
+  },
+  "takesPayment": {
+    "name": "emporium_fixture_paid",
+    "description": "Synthetic house tool that takes an x402 payment argument.",
+    "inputSchema": { "type": "object", "properties": { "payment": { "type": "string" } } },
+    "annotations": { "readOnlyHint": true, "destructiveHint": false }
+  },
+  "forwardedResult": {
+    "content": [{ "type": "text", "text": "synthetic result of 402milly_get_grid_metadata" }],
+    "structuredContent": { "synthetic": true }
+  }
+}

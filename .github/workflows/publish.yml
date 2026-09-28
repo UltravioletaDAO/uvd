@@ -1,0 +1,111 @@
+name: publish
+
+# Manual only: a person runs it from the Actions tab, on main, with the version to publish. It never
+# runs on push, tag or merge. Trusted publishing (OIDC) on both registries: no tokens, no secrets.
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to publish; must equal package.json and python/pyproject.toml"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: publish
+  cancel-in-progress: false
+
+jobs:
+  npm:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: npm
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+
+      - name: The input version must be the package version
+        env:
+          INPUT_VERSION: ${{ inputs.version }}
+        run: |
+          pkg=$(node -p "require('./package.json').version")
+          py=$(sed -n 's/^version = "\(.*\)"$/\1/p' python/pyproject.toml)
+          if [ "$INPUT_VERSION" != "$pkg" ] || [ "$INPUT_VERSION" != "$py" ]; then
+            echo "::error::input $INPUT_VERSION, package.json $pkg, pyproject $py"
+            exit 1
+          fi
+
+      - name: npm must support trusted publishing (>= 11.5.1)
+        run: |
+          node -e "const [a,b,c]=process.argv[1].split('.').map(Number); process.exit(a>11||(a===11&&(b>5||(b===5&&c>=1)))?0:1)" "$(npm --version)" \
+            || { echo "::error::npm $(npm --version) cannot publish with OIDC"; exit 1; }
+
+      - run: npm ci
+
+      - name: Tests, offline
+        env:
+          HTTPS_PROXY: http://127.0.0.1:9
+          HTTP_PROXY: http://127.0.0.1:9
+          NO_PROXY: 127.0.0.1,localhost
+          NODE_USE_ENV_PROXY: "1"
+          UVD_CACHE_DIR: ${{ runner.temp }}/uvd-cache
+        run: npm test
+
+      - name: Publish (the prepack script builds dist/uvd.mjs)
+        run: npm publish --access public
+
+  pypi:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: pypi
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+        with:
+          version: "0.12.19"
+          enable-cache: false
+
+      - name: The input version must be the package version
+        env:
+          INPUT_VERSION: ${{ inputs.version }}
+        run: |
+          pkg=$(node -p "require('./package.json').version")
+          py=$(sed -n 's/^version = "\(.*\)"$/\1/p' python/pyproject.toml)
+          if [ "$INPUT_VERSION" != "$pkg" ] || [ "$INPUT_VERSION" != "$py" ]; then
+            echo "::error::input $INPUT_VERSION, package.json $pkg, pyproject $py"
+            exit 1
+          fi
+
+      - run: npm ci
+
+      - name: Build the bundle and the wheel
+        env:
+          INPUT_VERSION: ${{ inputs.version }}
+        run: |
+          npm run build
+          npm run build:wheel
+          mkdir -p pypi-dist
+          cp "dist/uvd-$INPUT_VERSION-py3-none-any.whl" pypi-dist/
+
+      - name: Publish
+        uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # v1.14.2
+        with:
+          packages-dir: pypi-dist/
