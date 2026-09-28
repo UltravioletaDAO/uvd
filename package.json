@@ -25,6 +25,7 @@
   },
   "files": [
     "dist/uvd.mjs",
+    "dist/THIRD_PARTY_LICENSES.txt",
     "AGENTS.md"
   ],
   "engines": {
@@ -40,7 +41,8 @@
     "test:dist": "UVD_TEST_BIN=dist/uvd.mjs node --test --test-reporter=spec \"test/**/*.test.ts\"",
     "fixtures:record": "node scripts/record-fixtures.ts",
     "fixtures:serve": "node scripts/serve-fixtures.ts",
-    "prepack": "npm run build"
+    "prepack": "npm run build",
+    "check:artifacts": "node scripts/check-artifacts.mjs"
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.14",

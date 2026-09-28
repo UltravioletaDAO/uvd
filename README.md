@@ -28,6 +28,7 @@ Node.js 24. `npm ci`, then:
 | `npm run build` | Bundles `dist/uvd.mjs` with esbuild |
 | `npm pack` | `uvd-0.1.0.tgz` |
 | `npm run build:wheel` | The PyPI wheel in `dist/` (needs [uv](https://docs.astral.sh/uv/)) |
+| `npm run check:artifacts` | Checks the tarball and the wheel carry the third-party licenses |
 | `npm run fixtures:serve` | Serves the recorded fixtures locally, for trying uvd offline |
 
 Fixtures are recorded from Emporium by `scripts/record-fixtures.ts`, by hand and rarely; see
@@ -36,4 +37,5 @@ Fixtures are recorded from Emporium by `scripts/record-fixtures.ts`, by hand and
 
 ## License
 
-MIT © 2026 Ultravioleta DAO
+MIT © 2026 Ultravioleta DAO. The bundle includes third-party packages; their licenses ship next
+to it as `THIRD_PARTY_LICENSES.txt` (in the npm package and in the wheel).

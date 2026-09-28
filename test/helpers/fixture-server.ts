@@ -9,6 +9,8 @@
 //   why). Served only when a test asks for them.
 // - test/fixtures/synthetic/: hand-written data, clearly labeled. Served only when a test asks.
 //
+// Options are read on every request, so a test may change them between two runs of uvd.
+//
 // One rewrite always happens: the `url_mcp` of every surface in `emporium_superficies` (and
 // `mostrador_url`) points back at this server, under /surfaces/<id>/mcp, so a test that follows a
 // surface URL stays on 127.0.0.1.
@@ -47,6 +49,8 @@ export interface FixtureServerOptions {
   surfaceTools?: Record<string, Json[]>;
   /** Result for a counter tools/call that has no recorded fixture, by tool name. */
   counterResults?: Record<string, Json>;
+  /** `emporium_buscar_tool` structured answers with no recorded fixture, by `texto`. */
+  catalog?: Record<string, Json>;
   /** Port to listen on; 0 (the default) picks a free one. */
   port?: number;
 }
@@ -59,6 +63,7 @@ export interface FixtureServer {
 
 const FIXTURES = join(import.meta.dirname, '..', 'fixtures');
 export const SURFACES_TOOL = 'emporium_superficies';
+const SEARCH_TOOL_TOOL = 'emporium_buscar_tool';
 
 export function loadExchanges(dir: string, only?: string[]): Exchange[] {
   return readdirSync(dir)
@@ -148,6 +153,9 @@ export async function startFixtureServer(options: FixtureServerOptions = {}): Pr
         error = exchange.response.body.error as Json | undefined;
       } else if (method === 'tools/call' && path === '/mostrador/mcp') {
         result = options.counterResults?.[String(params?.name)];
+      } else if (method === 'tools/call' && path === '/mcp' && params?.name === SEARCH_TOOL_TOOL) {
+        const answer = options.catalog?.[String((params.arguments as Json | undefined)?.texto)];
+        if (answer) result = { content: [{ type: 'text', text: JSON.stringify(answer) }], structuredContent: answer };
       }
       if (result && path === '/mostrador/mcp' && method === 'tools/list' && options.extraCounterTools) {
         result = { ...result, tools: [...(result.tools as Json[]), ...options.extraCounterTools] };

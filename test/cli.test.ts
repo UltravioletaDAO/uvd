@@ -9,22 +9,34 @@ import { runCli, tempCacheDir } from './helpers/run.ts';
 type Json = Record<string, unknown>;
 
 const USER_AGENT = `uvd/${pkg.version} (+https://github.com/UltravioletaDAO/uvd)`;
-const newSurface = loadSynthetic<{ surface: Json; tools: Json[] }>('new-surface.json');
+const newSurface = loadSynthetic<{ surface: Json; noAuthSurface: Json; tools: Json[] }>('new-surface.json');
 const counterTools = loadSynthetic<Record<string, Json>>('counter-tools.json');
+const catalog = loadSynthetic<{ answers: Record<string, Json> }>('catalog.json').answers;
 
 let server: FixtureServer;
 
 before(async () => {
   server = await startFixtureServer({
     derived: ['mcp.call.emporium_buscar_tool.describe_lookup_wallet.json'],
-    extraSurfaces: [newSurface.surface],
-    surfaceTools: { [String(newSurface.surface.id)]: newSurface.tools },
+    extraSurfaces: [newSurface.surface, newSurface.noAuthSurface],
+    surfaceTools: {
+      [String(newSurface.surface.id)]: newSurface.tools,
+      [String(newSurface.noAuthSurface.id)]: newSurface.tools,
+    },
     extraCounterTools: [
-      counterTools.paidForwarded as Json,
-      counterTools.notReadOnly as Json,
-      counterTools.takesPayment as Json,
-    ],
+      'paidForwarded',
+      'notReadOnly',
+      'takesPayment',
+      'unclassified',
+      'nullNotOnCounter',
+      'lecturaDestructive',
+      'lecturaWrites',
+      'lecturaPayment',
+      'credentialSurface',
+      'unknownSurface',
+    ].map((key) => counterTools[key] as Json),
     counterResults: { '402milly_get_grid_metadata': counterTools.forwardedResult as Json },
+    catalog,
   });
 });
 
@@ -296,12 +308,127 @@ describe('tools/list cache', () => {
 
   it('stores only public tool listings', async () => {
     const cache = tempCacheDir();
+    await uvd(['tools'], { cache });
+    await uvd(['tools', 'uvd-fixture-surface'], { cache });
     await uvd(['call', 'emporium_superficies', '--input', '{"secret":"do-not-store"}'], { cache });
     const stored = readdirSync(cache).map((f) => readFileSync(join(cache, f), 'utf8'));
-    assert.ok(stored.length > 0);
+    assert.equal(stored.length, 2);
     for (const text of stored) {
       assert.ok(!text.includes('do-not-store'));
       assert.ok(Array.isArray((JSON.parse(text) as Json).value));
     }
+  });
+});
+
+describe('uvd call fails closed', () => {
+  /** Runs `uvd call <name>` and checks it was refused with `toolClass`, before any call of it. */
+  async function refusedBeforeCalling(name: string, toolClass: string, source: string) {
+    const run = await uvd(['call', name, '--input', '{}']);
+    assert.equal(run.code, 5, `${name}: ${run.stderr}`);
+    const error = errorOf(run.stderr);
+    assert.equal(error.code, 'refused', name);
+    assert.equal((error.details as Json).class, toolClass, name);
+    assert.equal((error.details as Json).source, source, name);
+    assert.equal(toolCalls(run.requests, name).length, 0, name);
+    return run;
+  }
+
+  it('refuses a catalog entry without por_que_no, on a tool without annotations', async () => {
+    await refusedBeforeCalling('402milly_uvd_fixture_unclassified', 'sin_clasificar', 'catalog');
+  });
+
+  it('refuses a catalog entry with por_que_no null and en_el_mostrador null', async () => {
+    await refusedBeforeCalling('402milly_uvd_fixture_nullnull', 'sin_clasificar', 'catalog');
+  });
+
+  it('lets annotations that object win over a catalog "free"', async () => {
+    await refusedBeforeCalling('402milly_uvd_fixture_destructive', 'escribe', 'annotations');
+    await refusedBeforeCalling('402milly_uvd_fixture_writes', 'escribe', 'annotations');
+    await refusedBeforeCalling('402milly_uvd_fixture_payment', 'cobra_por_llamada', 'annotations');
+  });
+
+  it('refuses a read-only tool of a surface that needs a credential, without asking the catalog', async () => {
+    const run = await refusedBeforeCalling('execution-market_uvd_fixture_tasks', 'pide_credencial', 'surface');
+    assert.equal(toolCalls(run.requests, 'emporium_buscar_tool').length, 0);
+  });
+
+  it('refuses a tool whose surface is not in the catalog', async () => {
+    await refusedBeforeCalling('uvd-ghost-surface_uvd_fixture_tool', 'pide_credencial', 'surface');
+  });
+
+  it('refuses a name the counter lists twice', async () => {
+    const duplicated = await startFixtureServer({
+      extraCounterTools: [
+        {
+          name: 'emporium_superficies',
+          inputSchema: { type: 'object', properties: {} },
+          annotations: { readOnlyHint: true, destructiveHint: false },
+        },
+      ],
+    });
+    try {
+      const run = await runCli(['call', 'emporium_superficies'], {
+        UVD_EMPORIUM_URL: duplicated.url,
+        UVD_CACHE_DIR: tempCacheDir(),
+      });
+      assert.equal(run.code, 5, run.stderr);
+      assert.equal(errorOf(run.stderr).code, 'refused');
+      assert.equal(toolCalls(duplicated.requests, 'emporium_superficies').length, 0);
+    } finally {
+      await duplicated.close();
+    }
+  });
+
+  it('decides on a fresh tools/list of the counter, never on the cache', async () => {
+    const mutable = structuredClone(counterTools.mutable as Json);
+    const changing = await startFixtureServer({
+      extraCounterTools: [mutable],
+      counterResults: { emporium_fixture_mutable: counterTools.mutableResult as Json },
+    });
+    try {
+      const cache = tempCacheDir();
+      const env = { UVD_EMPORIUM_URL: changing.url, UVD_CACHE_DIR: cache };
+      const first = await runCli(['call', 'emporium_fixture_mutable'], env);
+      assert.equal(first.code, 0, first.stderr);
+      (mutable.annotations as Json).readOnlyHint = false;
+      const from = changing.requests.length;
+      const second = await runCli(['call', 'emporium_fixture_mutable'], env);
+      assert.equal(second.code, 5, second.stderr);
+      assert.equal(toolCalls(changing.requests.slice(from), 'emporium_fixture_mutable').length, 0);
+    } finally {
+      await changing.close();
+    }
+  });
+});
+
+describe('uvd tools on a surface that needs a credential', () => {
+  for (const service of ['meshrelay', 'uvd-fixture-noauth']) {
+    it(`refuses ${service} (exit 5) without contacting it`, async () => {
+      const run = await uvd(['tools', service]);
+      assert.equal(run.code, 5, run.stderr);
+      assert.equal(errorOf(run.stderr).code, 'credential_required');
+      assert.ok(!run.requests.some((r) => r.path.startsWith('/surfaces/')));
+    });
+  }
+});
+
+describe('hardening', () => {
+  it('refetches when the cache file is corrupt instead of failing', async () => {
+    const cache = tempCacheDir();
+    await uvd(['tools'], { cache });
+    for (const file of readdirSync(cache)) writeFileSync(join(cache, file), 'null');
+    const run = await uvd(['tools'], { cache });
+    assert.equal(run.code, 0, run.stderr);
+    assert.ok(Array.isArray(JSON.parse(run.stdout)));
+    assert.equal(run.requests.filter((r) => r.rpcMethod === 'tools/list').length, 1);
+  });
+
+  it('never prints the password of a UVD_EMPORIUM_URL it refuses', async () => {
+    const run = await runCli(['tools'], {
+      UVD_EMPORIUM_URL: 'https://agent:hunter2@emporium.example',
+      UVD_CACHE_DIR: tempCacheDir(),
+    });
+    assert.equal(run.code, 2);
+    assert.ok(!run.stderr.includes('hunter2'), run.stderr);
   });
 });

@@ -63,7 +63,7 @@ export class Emporium {
 
   /** tools/list of any MCP endpoint, through the cache unless it is disabled. */
   async listTools(url: string): Promise<Tool[]> {
-    const cached = await this.cache?.get<Tool[]>(url);
+    const cached = await this.cache?.get(url);
     if (cached) return cached;
     const tools = await this.connections.listTools(url);
     await this.cache?.set(url, tools);

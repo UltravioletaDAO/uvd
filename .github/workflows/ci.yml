@@ -20,7 +20,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: read # checkout only
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -28,6 +28,7 @@ concurrency:
 
 jobs:
   ci:
+    name: Checks, bundle, packages and criteria
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -78,6 +79,9 @@ jobs:
 
       - name: Build the wheel
         run: npm run build:wheel
+
+      - name: The tarball and the wheel carry THIRD_PARTY_LICENSES.txt with every bundled package
+        run: npm run check:artifacts
 
       - name: Serve the recorded fixtures
         run: |

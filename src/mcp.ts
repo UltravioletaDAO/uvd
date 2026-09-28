@@ -7,11 +7,14 @@ import { USER_AGENT, VERSION } from './version.ts';
 
 export type { CallToolResult, Tool };
 
-/** Every request uvd makes goes through here, so every request carries uvd's User-Agent. */
+/**
+ * Every request uvd makes goes through here: it carries uvd's User-Agent and never follows a
+ * redirect (an endpoint that redirects is an error, not a hop to somewhere else).
+ */
 export const userAgentFetch: typeof fetch = (input, init) => {
   const headers = new Headers(init?.headers);
   headers.set('user-agent', USER_AGENT);
-  return fetch(input, { ...init, headers });
+  return fetch(input, { ...init, headers, redirect: 'error' });
 };
 
 const REQUEST_TIMEOUT_MS = 30_000;

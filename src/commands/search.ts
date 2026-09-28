@@ -1,6 +1,6 @@
 import { TOOL_SEARCH_SERVICE, TOOL_SEARCH_TOOL } from '../emporium.ts';
 import { type Emporium, isRecord } from '../emporium-client.ts';
-import { renderTable } from '../output.ts';
+import { renderTable, stripControl } from '../output.ts';
 
 /** One search hit: Emporium's fields as they came, tagged with where they came from. */
 export type SearchItem = { tipo: 'tool' | 'combo' | 'servicio' } & Record<string, unknown>;
@@ -104,7 +104,7 @@ export function searchTable({ items, notices }: SearchOutcome, width: number): s
         ),
   );
   const notes = noticeLines(notices);
-  if (notes.length > 0) out.push('', 'Notes:', ...notes.map((n) => `- ${n}`));
+  if (notes.length > 0) out.push('', 'Notes:', ...notes.map((n) => `- ${stripControl(n)}`));
   return `${out.join('\n')}\n`;
 }
 

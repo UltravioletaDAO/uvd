@@ -1,5 +1,6 @@
-// Builds the pure PyPI wheel (py3-none-any) from the bundle: copies dist/uvd.mjs and LICENSE into
-// python/ and runs `uv build --wheel`. The wheel lands in dist/. Run `npm run build` first.
+// Builds the pure PyPI wheel (py3-none-any) from the bundle: copies dist/uvd.mjs, its third-party
+// license notice and LICENSE into python/ and runs `uv build --wheel`. The wheel lands in dist/.
+// Run `npm run build` first.
 import { spawnSync } from 'node:child_process';
 import { copyFileSync, existsSync, mkdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -18,6 +19,10 @@ if (pyVersion !== npmVersion) {
 }
 mkdirSync(join(root, 'python', 'src', 'uvd', '_bundle'), { recursive: true });
 copyFileSync(bundle, join(root, 'python', 'src', 'uvd', '_bundle', 'uvd.mjs'));
+copyFileSync(
+  join(root, 'dist', 'THIRD_PARTY_LICENSES.txt'),
+  join(root, 'python', 'src', 'uvd', '_bundle', 'THIRD_PARTY_LICENSES.txt'),
+);
 copyFileSync(join(root, 'LICENSE'), join(root, 'python', 'LICENSE'));
 const run = spawnSync('uv', ['build', '--wheel', '--out-dir', join(root, 'dist'), join(root, 'python')], {
   stdio: 'inherit',

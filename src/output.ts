@@ -48,7 +48,24 @@ export function renderTable(columns: Column[], rows: Row[], width = 100): string
 }
 
 function clean(value: string | undefined): string {
-  return (value ?? '').replace(/\s+/g, ' ').trim();
+  return stripControl(value ?? '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+/**
+ * Removes terminal control characters (C0 except newline and tab, DEL and C1) from text that came
+ * from outside, so a table or a message cannot move the cursor, ring the bell or start an escape
+ * sequence. JSON output does not need it: JSON escapes them.
+ */
+export function stripControl(text: string): string {
+  let out = '';
+  for (const ch of text) {
+    const code = ch.codePointAt(0) ?? 0;
+    if ((code < 0x20 && ch !== '\n' && ch !== '\t') || (code >= 0x7f && code <= 0x9f)) continue;
+    out += ch;
+  }
+  return out;
 }
 
 function fit(text: string, width: number): string {
@@ -71,5 +88,5 @@ export function formatError(error: unknown, format: Format): { text: string; exi
     if (uvd.details) body.details = uvd.details;
     return { text: toJsonLine({ error: body }), exitCode: uvd.exitCode };
   }
-  return { text: `uvd: ${uvd.message}\n`, exitCode: uvd.exitCode };
+  return { text: `uvd: ${stripControl(uvd.message)}\n`, exitCode: uvd.exitCode };
 }

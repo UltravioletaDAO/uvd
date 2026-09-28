@@ -56,9 +56,10 @@ uvd search wallet | jq -r '.[] | select(.tipo == "tool" and .en_el_mostrador != 
 
 - No argument: Emporium's own MCP tools (`tools/list` of `/mcp`).
 - With a service id: the service is looked up in `emporium_superficies` (never in a list compiled
-  into uvd, so new services work without an upgrade) and its own MCP endpoint is listed. A service
-  that needs a credential even to list its tools is refused (exit 5) without contacting it. An
-  unknown id exits 4 and `error.details.known` lists the valid ones.
+  into uvd, so new services work without an upgrade) and its own MCP endpoint is listed. Only a
+  service whose `auth.tipo` is `none` is contacted: one that needs a credential, or does not say, is
+  refused (exit 5) without contacting it. An unknown id exits 4 and `error.details.known` lists the
+  valid ones.
 
 stdout is the array of MCP `Tool` objects as the endpoint returned them.
 
@@ -73,12 +74,21 @@ reads it from stdin). `<tool>` is the counter's name for it: `<service id>_<tool
 service's tool (e.g. `describe-net_describe_check_wallet`; `en_el_mostrador` in `uvd search` gives it
 directly), or the plain name of a counter tool such as `emporium_superficies`.
 
-Before calling, uvd checks the tool's class in Emporium's catalog (`emporium_buscar_tool`). If it
-moves money, writes, charges per call, is a payment rail, needs a credential or is unclassified,
-uvd **refuses without calling** (exit 5, `error.code = "refused"`, `error.details.class` names the
-class and `error.details.url_mcp` the direct endpoint). Tools the catalog does not classify (the
-counter's own tools and combos) are judged by their MCP annotations: read-only, not destructive, no
-payment argument.
+Before calling, uvd decides on a fresh `tools/list` of the counter (never the cache), and every
+rule fails closed. It **refuses without calling** (exit 5, `error.code = "refused"`,
+`error.details.class` names the class, `error.details.source` what decided, and
+`error.details.url_mcp` the direct endpoint when known) when:
+
+- the counter lists two tools with that name;
+- the tool belongs to a service that is not in `emporium_superficies` or whose `auth.tipo` is not
+  `none` (class `pide_credencial`);
+- Emporium's catalog (`emporium_buscar_tool`) classifies it as anything but free: it moves money,
+  writes, charges per call, is a payment rail, needs a credential, or has no class uvd can read
+  (`sin_clasificar`);
+- its MCP annotations (the counter's or the service's own) do not say read-only, or say
+  destructive, or it takes a payment argument (`payment…`, `x-payment`, `x402…`, any case): these
+  objections win even over a catalog "free". Tools the catalog does not classify (the counter's own
+  tools and combos) must carry read-only annotations.
 
 stdout is the tool's `structuredContent` when it returns one, otherwise its `content` array.
 
@@ -89,10 +99,14 @@ echo '{"wallet":"0x0000000000000000000000000000000000000000"}' | uvd call descri
 
 ## Environment and cache
 
-- `UVD_EMPORIUM_URL` — Emporium base URL (default `https://emporium.ultravioletadao.xyz`).
+- `UVD_EMPORIUM_URL` — Emporium base URL (default `https://emporium.ultravioletadao.xyz`). https only
+  (http only for `127.0.0.1`, `localhost` or `::1`), without credentials, query or fragment.
 - `tools/list` answers are cached for 10 minutes in the user cache directory
   (`~/Library/Caches/uvd` on macOS, `$XDG_CACHE_HOME/uvd` or `~/.cache/uvd` on Linux,
   `%LOCALAPPDATA%\uvd\Cache` on Windows). `--no-cache` skips it; `UVD_CACHE_TTL` (seconds) and
   `UVD_CACHE_DIR` change it. The cache only holds public tool listings, never arguments or secrets.
-- Every request carries `User-Agent: uvd/<version> (+https://github.com/UltravioletaDAO/uvd)`.
+- Every request carries `User-Agent: uvd/<version> (+https://github.com/UltravioletaDAO/uvd)`, and
+  uvd never follows a redirect.
+- Tables and plain text never contain terminal control characters (they are stripped from
+  everything that comes from outside); JSON output is exactly what the endpoints returned.
 - Be gentle: uvd makes a handful of requests per command. Do not loop it at high frequency.

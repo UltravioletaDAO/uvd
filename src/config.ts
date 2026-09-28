@@ -8,19 +8,28 @@ export const DEFAULT_CACHE_TTL_SECONDS = 600;
 
 type Env = Record<string, string | undefined>;
 
-/** The Emporium base URL: UVD_EMPORIUM_URL, or production. */
+/** Hosts that may be reached over plain http (a local Emporium or the test fixtures). */
+const LOOPBACK = new Set(['127.0.0.1', 'localhost', '[::1]']);
+
+/**
+ * The Emporium base URL: UVD_EMPORIUM_URL, or production. https only (http only on loopback), and
+ * no user-info, query or fragment. Errors never repeat the value: it may hold a password.
+ */
 export function emporiumBaseUrl(env: Env): string {
   const raw = env.UVD_EMPORIUM_URL?.trim() || DEFAULT_EMPORIUM_URL;
   let url: URL;
   try {
     url = new URL(raw);
   } catch {
-    throw usage(`UVD_EMPORIUM_URL is not a valid URL: ${raw}`);
+    throw usage('UVD_EMPORIUM_URL is not a valid URL');
   }
-  if (url.protocol !== 'https:' && url.protocol !== 'http:') {
-    throw usage(`UVD_EMPORIUM_URL must be an http(s) URL: ${raw}`);
+  if (url.username || url.password || url.search || url.hash || raw.includes('?') || raw.includes('#')) {
+    throw usage('UVD_EMPORIUM_URL must not carry credentials, a query or a fragment');
   }
-  return raw.replace(/\/+$/, '');
+  if (url.protocol === 'http:' ? !LOOPBACK.has(url.hostname) : url.protocol !== 'https:') {
+    throw usage('UVD_EMPORIUM_URL must be an https URL (http only for 127.0.0.1, localhost or ::1)');
+  }
+  return `${url.origin}${url.pathname}`.replace(/\/+$/, '');
 }
 
 /**

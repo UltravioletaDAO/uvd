@@ -1,6 +1,7 @@
 import { createHash, randomBytes } from 'node:crypto';
 import { mkdir, readFile, rename, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
+import type { Tool } from './mcp.ts';
 
 /**
  * The tools/list cache. One JSON file per endpoint, named by the SHA-256 of its URL. It only ever
@@ -10,11 +11,26 @@ import { join } from 'node:path';
 
 const FORMAT = 1;
 
-interface Entry<T> {
+interface Entry {
   format: number;
   endpoint: string;
   fetchedAt: number;
-  value: T;
+  value: Tool[];
+}
+
+function isEntry(value: unknown): value is Entry {
+  if (typeof value !== 'object' || value === null || Array.isArray(value)) return false;
+  const entry = value as Record<string, unknown>;
+  return (
+    entry.format === FORMAT &&
+    typeof entry.fetchedAt === 'number' &&
+    Number.isFinite(entry.fetchedAt) &&
+    Array.isArray(entry.value) &&
+    entry.value.every(
+      (tool: unknown) =>
+        typeof tool === 'object' && tool !== null && typeof (tool as Record<string, unknown>).name === 'string',
+    )
+  );
 }
 
 export class ToolsCache {
@@ -32,23 +48,25 @@ export class ToolsCache {
     return join(this.dir, `${createHash('sha256').update(url).digest('hex')}.json`);
   }
 
-  /** The cached value if it exists and is younger than the TTL; `undefined` otherwise. */
-  async get<T>(url: string): Promise<T | undefined> {
-    let entry: Entry<T>;
+  /**
+   * The cached tool list if the file is a well-formed entry younger than the TTL; `undefined` (a
+   * miss, so the caller refetches) for anything else: no file, bad JSON, a wrong shape, an old one.
+   */
+  async get(url: string): Promise<Tool[] | undefined> {
     try {
-      entry = JSON.parse(await readFile(this.fileFor(url), 'utf8')) as Entry<T>;
+      const entry: unknown = JSON.parse(await readFile(this.fileFor(url), 'utf8'));
+      if (!isEntry(entry)) return undefined;
+      const age = this.now() - entry.fetchedAt;
+      if (age < 0 || age >= this.ttlMs) return undefined;
+      return entry.value;
     } catch {
       return undefined;
     }
-    if (entry.format !== FORMAT || typeof entry.fetchedAt !== 'number') return undefined;
-    const age = this.now() - entry.fetchedAt;
-    if (age < 0 || age >= this.ttlMs) return undefined;
-    return entry.value;
   }
 
-  /** Stores a value. A cache that cannot be written is not an error: the next run refetches. */
-  async set<T>(url: string, value: T): Promise<void> {
-    const entry: Entry<T> = { format: FORMAT, endpoint: publicEndpoint(url), fetchedAt: this.now(), value };
+  /** Stores a tool list. A cache that cannot be written is not an error: the next run refetches. */
+  async set(url: string, value: Tool[]): Promise<void> {
+    const entry: Entry = { format: FORMAT, endpoint: publicEndpoint(url), fetchedAt: this.now(), value };
     const file = this.fileFor(url);
     const tmp = `${file}.${randomBytes(6).toString('hex')}.tmp`;
     try {

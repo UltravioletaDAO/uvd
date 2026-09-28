@@ -11,13 +11,14 @@ import { renderTable } from '../output.ts';
 export async function tools(emporium: Emporium, service: string | undefined): Promise<Tool[]> {
   if (service === undefined) return emporium.listTools(emporium.mcpUrl);
   const surface = resolveSurface(await emporium.surfaces(), service);
+  // Only a surface that declares it needs nothing is contacted; a missing `auth` is not "none".
   const auth = surface.auth?.tipo;
-  if (auth !== undefined && auth !== 'none') {
+  if (auth !== 'none') {
     throw new UvdError(
       'credential_required',
-      `${surface.id} needs a credential (${auth}) even to list its tools. uvd 0.1 has no credentials; authenticated services arrive in a later version. Its direct endpoint is ${surface.url_mcp}`,
+      `${surface.id} needs a credential (auth: ${auth ?? 'not declared'}) even to list its tools. uvd 0.1 has no credentials; authenticated services arrive in a later version. Its direct endpoint is ${surface.url_mcp}`,
       EXIT.refused,
-      { service: surface.id, auth, url_mcp: surface.url_mcp },
+      { service: surface.id, auth: auth ?? null, url_mcp: surface.url_mcp },
     );
   }
   return emporium.listTools(surface.url_mcp);
