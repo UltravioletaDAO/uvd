@@ -1,0 +1,183 @@
+{
+  "endpoint": "/mcp",
+  "request": {
+    "method": "tools/list"
+  },
+  "response": {
+    "status": 200,
+    "contentType": "application/json",
+    "body": {
+      "jsonrpc": "2.0",
+      "id": 2,
+      "result": {
+        "tools": [
+          {
+            "name": "emporium_buscar_servicio",
+            "title": "Buscar un servicio en la guia de Emporium",
+            "description": "Busca en la guía de Emporium un servicio para una intención, en palabras: primero los negocios dados de alta y después los endpoints del bazar público x402 que una persona admitió, cada uno con su evidencia, lo que le falta y su enlace directo; o un hueco, si no hay ninguno. Emporium, los instrumentos comunes para agentes, con mandato y límites, no llama a ningún endpoint y no cobra: enlaza. Lo que buscás se guarda en privado para mejorar el motor; qué se guarda y por cuánto tiempo: /privacidad. · Searches the guide of Emporium for a service that answers an intent in words: first the businesses that registered, then the endpoints of the public x402 bazaar that a person admitted, each with its evidence, what it lacks and its direct link; or a gap, if there is none. Emporium, the common instruments for agents, with mandate and limits, calls no endpoint and charges nothing: it links. What you search for is stored privately to improve the engine; what is stored and for how long: /privacidad?idioma=en.",
+            "inputSchema": {
+              "$schema": "https://json-schema.org/draft/2020-12/schema",
+              "additionalProperties": false,
+              "properties": {
+                "categoria": {
+                  "description": "Una de las 16 categorias permitidas del manifiesto v1.",
+                  "enum": [
+                    "alimentos_y_bebidas",
+                    "transporte_y_logistica",
+                    "alojamiento_y_turismo",
+                    "eventos_y_entretenimiento",
+                    "deporte_y_recreacion",
+                    "salud_y_bienestar",
+                    "educacion_y_formacion",
+                    "servicios_profesionales",
+                    "servicios_para_el_hogar",
+                    "comercio_minorista",
+                    "moda_y_belleza",
+                    "tecnologia_y_software",
+                    "inmuebles",
+                    "agro_y_alimentos_primarios",
+                    "arte_y_artesania",
+                    "otros_servicios"
+                  ],
+                  "type": "string"
+                },
+                "idioma": {
+                  "default": "es",
+                  "description": "`es` o `en`. Sin el, `es`.",
+                  "enum": [
+                    "es",
+                    "en"
+                  ],
+                  "type": "string"
+                },
+                "limite": {
+                  "default": 10,
+                  "description": "Cuantos candidatos, 1..20. Sin el, 10.",
+                  "maximum": 20,
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                "q": {
+                  "description": "La intencion, en palabras: 2..200 caracteres.",
+                  "maxLength": 200,
+                  "minLength": 2,
+                  "type": "string"
+                },
+                "red": {
+                  "description": "La red, con la forma del bazar (p. ej. `eip155:8453`).",
+                  "pattern": "^[a-z0-9]+:[A-Za-z0-9]{1,64}$",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "q"
+              ],
+              "type": "object"
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "emporium_buscar_tool",
+            "title": "Buscar una tool en las superficies del catalogo",
+            "description": "Busca por subcadena en el nombre y la descripcion corta de las tools que un cliente anonimo puede listar en las superficies del catalogo de Emporium, los instrumentos comunes para agentes, con mandato y limites. Devuelve donde esta cada tool; esta tool no la llama. Las de lectura, gratis y sin credencial se pueden llamar por el mostrador, /mostrador/mcp: `en_el_mostrador` dice con que nombre, y `por_que_no` dice por que no cuando no se puede. En el mostrador tambien hay combos: tools de la casa que mezclan tools de varias plataformas; unos las llaman juntas en una sola llamada, y otros solo dan la receta, sin ejecutar nada. `combos` nombra los que tienen el texto en su nombre o en su descripcion, y `emporium_combos`, en el mostrador, los lista a todos. · Searches by substring in the name and short description of the tools an anonymous client can list in the surfaces of the catalog of Emporium, the common instruments for agents, with mandate and limits. Returns where each tool is; this tool does not call it. The free read-only tools that need no credential can be called through the counter, /mostrador/mcp: `en_el_mostrador` gives the name to use there, and `por_que_no` gives the reason when it cannot be called there. The counter also has combos: house tools that mix tools from several platforms; some call them together in a single call, and others only give the recipe, running nothing. `combos` names the ones with the text in their name or description, and `emporium_combos`, on the counter, lists them all.",
+            "inputSchema": {
+              "$schema": "https://json-schema.org/draft/2020-12/schema",
+              "additionalProperties": false,
+              "properties": {
+                "limite": {
+                  "default": 20,
+                  "description": "Tope de resultados, 1..=50. Sin el, 20.",
+                  "format": "uint8",
+                  "maximum": 50,
+                  "minimum": 1,
+                  "type": [
+                    "integer",
+                    "null"
+                  ]
+                },
+                "texto": {
+                  "description": "Subcadena a buscar en el nombre y en la descripcion corta de cada tool.",
+                  "maxLength": 120,
+                  "minLength": 2,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "texto"
+              ],
+              "type": "object"
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "emporium_como_conectar",
+            "title": "Como conectarse directo a una superficie",
+            "description": "Devuelve la receta para que un cliente se conecte DIRECTO a una superficie del catalogo de Emporium, los instrumentos comunes para agentes, con mandato y limites, segun su tipo de auth. Emporium no emite, no guarda y no reenvia credenciales.",
+            "inputSchema": {
+              "$schema": "https://json-schema.org/draft/2020-12/schema",
+              "additionalProperties": false,
+              "properties": {
+                "superficie_id": {
+                  "description": "El `id` de la superficie en el catalogo.",
+                  "maxLength": 32,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "superficie_id"
+              ],
+              "type": "object"
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            }
+          },
+          {
+            "name": "emporium_superficies",
+            "title": "Superficies del catalogo de Emporium",
+            "description": "Lista las superficies MCP del catalogo de Emporium, los instrumentos comunes para agentes, con mandato y limites: id, URL directa, tipo de auth, si mueve dinero, cuantas tools se le midieron y cuantas se pueden llamar por el mostrador (`reenviadas`). Esta tool no llama a ninguna superficie. Las tools de lectura, gratis y sin credencial se llaman por el mostrador, en `mostrador_url` (/mostrador/mcp), y la puerta directa de cada superficie sigue abierta. En el mostrador tambien hay combos: tools de la casa que mezclan tools de varias plataformas; unos las llaman juntas en una sola llamada, y otros solo dan la receta, sin ejecutar nada. `combos` dice cuantos hay, y `emporium_combos`, en el mostrador, los lista a todos. Emporium no custodia credenciales. · Lists the MCP surfaces in the catalog of Emporium, the common instruments for agents, with mandate and limits: id, direct URL, auth type, whether it moves money, how many tools were measured and how many can be called through the counter (`reenviadas`). This tool calls no surface. The free read-only tools that need no credential are called through the counter, at `mostrador_url` (/mostrador/mcp), and the direct door of each surface stays open. The counter also has combos: house tools that mix tools from several platforms; some call them together in a single call, and others only give the recipe, running nothing. `combos` says how many there are, and `emporium_combos`, on the counter, lists them all. Emporium does not custody credentials.",
+            "inputSchema": {
+              "$schema": "https://json-schema.org/draft/2020-12/schema",
+              "additionalProperties": false,
+              "properties": {
+                "mueve_dinero": {
+                  "default": null,
+                  "description": "Si viene, filtra por si la superficie mueve dinero.",
+                  "type": [
+                    "boolean",
+                    "null"
+                  ]
+                },
+                "solo_abiertas": {
+                  "default": false,
+                  "description": "Solo las superficies cuyo `auth.tipo` es `none`.",
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            }
+          }
+        ]
+      }
+    }
+  }
+}

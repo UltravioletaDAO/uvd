@@ -1,0 +1,63 @@
+{
+  "note": "Hand-written, not recorded. A surface that exists only in this file, so uvd's code cannot know it: the fixture server appends it to the recorded emporium_superficies answer and serves its tools/list. It proves `uvd tools <service>` resolves the service through emporium_superficies. `noAuthSurface` is a second one that declares no `auth` at all: uvd must not contact it.",
+  "surface": {
+    "id": "uvd-fixture-surface",
+    "nombre": "uvd fixture surface (synthetic)",
+    "url_mcp": "https://uvd-fixture-surface.invalid/mcp",
+    "url_api": "",
+    "auth": {
+      "tipo": "none",
+      "notas": "synthetic",
+      "prm_url": ""
+    },
+    "mueve_dinero": false,
+    "alcanzable": true,
+    "probable_gratis": true,
+    "reenviadas": 0,
+    "tools_conocidas": 2,
+    "medido_el": "2026-09-28",
+    "fuente": "test/fixtures/synthetic/new-surface.json"
+  },
+  "tools": [
+    {
+      "name": "fixture_status",
+      "title": "Status of the synthetic surface",
+      "description": "Returns a fixed status. Synthetic.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "fixture_write",
+      "description": "Writes something. Synthetic.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false
+      }
+    }
+  ],
+  "noAuthSurface": {
+    "id": "uvd-fixture-noauth",
+    "nombre": "uvd fixture surface without auth (synthetic)",
+    "url_mcp": "https://uvd-fixture-noauth.invalid/mcp",
+    "mueve_dinero": false,
+    "alcanzable": true,
+    "reenviadas": 0,
+    "medido_el": "2026-09-28",
+    "fuente": "test/fixtures/synthetic/new-surface.json"
+  }
+}

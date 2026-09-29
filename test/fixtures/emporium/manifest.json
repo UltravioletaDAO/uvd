@@ -1,0 +1,48 @@
+{
+  "note": "Recorded from Emporium by scripts/record-fixtures.ts. Never edited by hand.",
+  "serverInfo": {
+    "name": "emporium",
+    "title": "Emporium",
+    "version": "422bc6730ef9910ccc85057f675b7eeb05fdb1c4",
+    "description": "los instrumentos comunes para agentes, con mandato y límites",
+    "websiteUrl": "https://emporium.ultravioletadao.xyz"
+  },
+  "pauseMs": 1000,
+  "forwardedProbe": {
+    "name": "402milly_get_grid_metadata",
+    "tool": "get_grid_metadata"
+  },
+  "paidProbe": "lookup_wallet",
+  "sessions": [
+    {
+      "recordedAt": "2026-09-28T22:15:52.423Z",
+      "base": "https://emporium.ultravioletadao.xyz",
+      "userAgent": "uvd/0.1.0 (+https://github.com/UltravioletaDAO/uvd)",
+      "requests": 12,
+      "files": [
+        "mcp.initialize.json",
+        "mcp.tools-list.json",
+        "mcp.call.emporium_superficies.json",
+        "mcp.call.emporium_buscar_servicio.reputacion.json",
+        "mcp.call.emporium_buscar_servicio.pagos.json",
+        "counter.initialize.json",
+        "counter.tools-list.json",
+        "counter.call.emporium_superficies.json",
+        "mcp.call.emporium_buscar_tool.get_grid_metadata.json",
+        "mcp.call.emporium_buscar_tool.lookup_wallet.json"
+      ]
+    },
+    {
+      "recordedAt": "2026-09-28T22:21:22.215Z",
+      "base": "https://emporium.ultravioletadao.xyz",
+      "userAgent": "uvd/0.1.0 (+https://github.com/UltravioletaDAO/uvd)",
+      "requests": 4,
+      "files": [
+        "mcp.call.emporium_buscar_servicio.lookup_wallet.json",
+        "mcp.call.emporium_buscar_servicio.wallet.json",
+        "mcp.call.emporium_buscar_tool.reputacion.json",
+        "mcp.call.emporium_buscar_tool.wallet.json"
+      ]
+    }
+  ]
+}

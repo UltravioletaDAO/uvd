@@ -1,0 +1,147 @@
+name: publish
+
+# Manual only: a person runs it from the Actions tab, on main, with the version to publish. It never
+# runs on push, tag or merge. Trusted publishing (OIDC) on both registries: no tokens, no secrets.
+# Both registries depend on the same `check` job, so they cannot publish different things: the
+# version is checked once and the tests run once, and only the jobs that publish get `id-token`.
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to publish; must equal package.json and python/pyproject.toml"
+        required: true
+        type: string
+
+permissions:
+  contents: read # jobs that publish add id-token themselves
+
+concurrency:
+  group: publish
+  cancel-in-progress: false
+
+jobs:
+  check:
+    name: Check version and tests
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          package-manager-cache: false
+
+      - name: The input version must be the package version
+        env:
+          INPUT_VERSION: ${{ inputs.version }}
+        run: |
+          pkg=$(node -p "require('./package.json').version")
+          py=$(sed -n 's/^version = "\(.*\)"$/\1/p' python/pyproject.toml)
+          if [ "$INPUT_VERSION" != "$pkg" ] || [ "$INPUT_VERSION" != "$py" ]; then
+            echo "::error::input $INPUT_VERSION, package.json $pkg, pyproject $py"
+            exit 1
+          fi
+
+      - run: npm ci --ignore-scripts
+
+      - name: Tests, offline
+        env:
+          HTTPS_PROXY: http://127.0.0.1:9
+          HTTP_PROXY: http://127.0.0.1:9
+          NO_PROXY: 127.0.0.1,localhost
+          NODE_USE_ENV_PROXY: "1"
+        run: |
+          export UVD_CACHE_DIR="$RUNNER_TEMP/uvd-cache"
+          npm test
+
+  npm:
+    name: Publish to npm
+    needs: check
+    runs-on: ubuntu-latest
+    environment: npm
+    timeout-minutes: 15
+    permissions:
+      contents: read # checkout
+      id-token: write # trusted publishing (OIDC), only in the jobs that publish
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+          package-manager-cache: false
+
+      - name: npm must support trusted publishing (>= 11.5.1)
+        run: |
+          node -e "const [a,b,c]=process.argv[1].split('.').map(Number); process.exit(a>11||(a===11&&(b>5||(b===5&&c>=1)))?0:1)" "$(npm --version)" \
+            || { echo "::error::npm $(npm --version) cannot publish with OIDC"; exit 1; }
+
+      - run: npm ci --ignore-scripts
+
+      - name: Publish (the prepack script builds dist/)
+        run: npm publish --access public
+
+  pypi-build:
+    name: Build the wheel
+    needs: check
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          package-manager-cache: false
+
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+        with:
+          version: "0.12.19"
+          enable-cache: false
+
+      - run: npm ci --ignore-scripts
+
+      - name: Build the bundle and the wheel
+        env:
+          INPUT_VERSION: ${{ inputs.version }}
+        run: |
+          npm run build
+          npm run build:wheel
+          mkdir -p pypi-dist
+          cp "dist/uvd-$INPUT_VERSION-py3-none-any.whl" pypi-dist/
+
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: wheel
+          path: pypi-dist/
+          if-no-files-found: error
+          retention-days: 1
+
+  pypi:
+    name: Publish to PyPI
+    needs: pypi-build
+    runs-on: ubuntu-latest
+    environment: pypi
+    timeout-minutes: 15
+    permissions:
+      contents: read # checkout
+      id-token: write # trusted publishing (OIDC), only in the jobs that publish
+    steps:
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: wheel
+          path: pypi-dist/
+
+      - name: Publish
+        uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # v1.14.2
+        with:
+          packages-dir: pypi-dist/

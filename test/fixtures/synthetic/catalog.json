@@ -1,0 +1,104 @@
+{
+  "note": "Hand-written, not recorded. emporium_buscar_tool answers (structuredContent) for the synthetic 402milly_uvd_fixture_* counter tools, by `texto`: one entry without `por_que_no`, one with `por_que_no: null` and `en_el_mostrador: null`, and three free (`null` + their counter name) whose annotations object.",
+  "answers": {
+    "uvd_fixture_unclassified": {
+      "aviso": "synthetic",
+      "combos": [],
+      "metodo": "subcadena_normalizada",
+      "no_listables": [],
+      "resultados": [
+        {
+          "superficie_id": "402milly",
+          "tool": "uvd_fixture_unclassified",
+          "auth_tipo": "none",
+          "descripcion_corta": "Synthetic.",
+          "donde": "nombre",
+          "medido_el": "2026-09-28",
+          "url_mcp": "https://mcp.402milly.xyz/mcp",
+          "en_el_mostrador": "402milly_uvd_fixture_unclassified"
+        }
+      ],
+      "total": 1
+    },
+    "uvd_fixture_nullnull": {
+      "aviso": "synthetic",
+      "combos": [],
+      "metodo": "subcadena_normalizada",
+      "no_listables": [],
+      "resultados": [
+        {
+          "superficie_id": "402milly",
+          "tool": "uvd_fixture_nullnull",
+          "auth_tipo": "none",
+          "descripcion_corta": "Synthetic.",
+          "donde": "nombre",
+          "medido_el": "2026-09-28",
+          "url_mcp": "https://mcp.402milly.xyz/mcp",
+          "en_el_mostrador": null,
+          "por_que_no": null
+        }
+      ],
+      "total": 1
+    },
+    "uvd_fixture_destructive": {
+      "aviso": "synthetic",
+      "combos": [],
+      "metodo": "subcadena_normalizada",
+      "no_listables": [],
+      "resultados": [
+        {
+          "superficie_id": "402milly",
+          "tool": "uvd_fixture_destructive",
+          "auth_tipo": "none",
+          "descripcion_corta": "Synthetic.",
+          "donde": "nombre",
+          "medido_el": "2026-09-28",
+          "url_mcp": "https://mcp.402milly.xyz/mcp",
+          "en_el_mostrador": "402milly_uvd_fixture_destructive",
+          "por_que_no": null
+        }
+      ],
+      "total": 1
+    },
+    "uvd_fixture_writes": {
+      "aviso": "synthetic",
+      "combos": [],
+      "metodo": "subcadena_normalizada",
+      "no_listables": [],
+      "resultados": [
+        {
+          "superficie_id": "402milly",
+          "tool": "uvd_fixture_writes",
+          "auth_tipo": "none",
+          "descripcion_corta": "Synthetic.",
+          "donde": "nombre",
+          "medido_el": "2026-09-28",
+          "url_mcp": "https://mcp.402milly.xyz/mcp",
+          "en_el_mostrador": "402milly_uvd_fixture_writes",
+          "por_que_no": null
+        }
+      ],
+      "total": 1
+    },
+    "uvd_fixture_payment": {
+      "aviso": "synthetic",
+      "combos": [],
+      "metodo": "subcadena_normalizada",
+      "no_listables": [],
+      "resultados": [
+        {
+          "superficie_id": "402milly",
+          "tool": "uvd_fixture_payment",
+          "auth_tipo": "none",
+          "descripcion_corta": "Synthetic.",
+          "donde": "nombre",
+          "medido_el": "2026-09-28",
+          "url_mcp": "https://mcp.402milly.xyz/mcp",
+          "en_el_mostrador": "402milly_uvd_fixture_payment",
+          "por_que_no": null
+        }
+      ],
+      "total": 1
+    }
+  }
+}

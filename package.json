@@ -1,0 +1,54 @@
+{
+  "name": "uvd",
+  "version": "0.1.0",
+  "description": "Ultravioleta DAO command-line interface: search Emporium, list MCP tools and call free read-only tools.",
+  "license": "MIT",
+  "author": "Ultravioleta DAO",
+  "homepage": "https://github.com/UltravioletaDAO/uvd#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/UltravioletaDAO/uvd.git"
+  },
+  "bugs": {
+    "url": "https://github.com/UltravioletaDAO/uvd/issues"
+  },
+  "keywords": [
+    "cli",
+    "mcp",
+    "emporium",
+    "ultravioleta",
+    "agents"
+  ],
+  "type": "module",
+  "bin": {
+    "uvd": "dist/uvd.mjs"
+  },
+  "files": [
+    "dist/uvd.mjs",
+    "dist/THIRD_PARTY_LICENSES.txt",
+    "AGENTS.md"
+  ],
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "build:wheel": "node scripts/build-wheel.mjs",
+    "typecheck": "tsc --noEmit",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "test": "node --test --test-reporter=spec \"test/**/*.test.ts\"",
+    "test:dist": "UVD_TEST_BIN=dist/uvd.mjs node --test --test-reporter=spec \"test/**/*.test.ts\"",
+    "fixtures:record": "node scripts/record-fixtures.ts",
+    "fixtures:serve": "node scripts/serve-fixtures.ts",
+    "prepack": "npm run build",
+    "check:artifacts": "node scripts/check-artifacts.mjs"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.14",
+    "@modelcontextprotocol/sdk": "1.31.0",
+    "@types/node": "24.19.0",
+    "esbuild": "0.28.2",
+    "typescript": "7.0.2"
+  }
+}
