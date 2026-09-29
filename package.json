@@ -1,5 +1,5 @@
 {
-  "name": "uvd",
+  "name": "@ultravioletadao/uvd",
   "version": "0.1.0",
   "description": "Ultravioleta DAO command-line interface: search Emporium, list MCP tools and call free read-only tools.",
   "license": "MIT",
@@ -28,6 +28,9 @@
     "dist/THIRD_PARTY_LICENSES.txt",
     "AGENTS.md"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "engines": {
     "node": ">=24"
   },

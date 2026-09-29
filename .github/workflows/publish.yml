@@ -46,6 +46,15 @@ jobs:
             exit 1
           fi
 
+      - name: The packages keep their names (npm trusted publishing is set up for the scoped one)
+        run: |
+          npm_name=$(node -p "require('./package.json').name")
+          py_name=$(sed -n 's/^name = "\(.*\)"$/\1/p' python/pyproject.toml)
+          if [ "$npm_name" != "@ultravioletadao/uvd" ] || [ "$py_name" != "uvd" ]; then
+            echo "::error::package.json $npm_name (want @ultravioletadao/uvd), pyproject $py_name (want uvd)"
+            exit 1
+          fi
+
       - run: npm ci --ignore-scripts
 
       - name: Tests, offline

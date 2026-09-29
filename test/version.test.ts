@@ -12,6 +12,15 @@ it('npm and PyPI packages carry the same version', () => {
   assert.equal(VERSION, pkg.version);
 });
 
+it('npm publishes the public scoped package, PyPI keeps uvd, and both install the uvd command', () => {
+  assert.equal(pkg.name, '@ultravioletadao/uvd');
+  assert.deepEqual(pkg.publishConfig, { access: 'public' });
+  assert.deepEqual(pkg.bin, { uvd: 'dist/uvd.mjs' });
+  const pyproject = readFileSync(join(ROOT, 'python', 'pyproject.toml'), 'utf8');
+  assert.equal(/^name = "([^"]+)"$/m.exec(pyproject)?.[1], 'uvd');
+  assert.match(pyproject, /^uvd = "uvd\._launcher:main"$/m);
+});
+
 it('the wheel pins the Node.js it runs on', () => {
   const pyproject = readFileSync(join(ROOT, 'python', 'pyproject.toml'), 'utf8');
   assert.match(pyproject, /dependencies = \["nodejs-wheel-binaries==24\.19\.0"\]/);
