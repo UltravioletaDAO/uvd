@@ -6,14 +6,17 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 const root = join(import.meta.dirname, '..');
-const { version } = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8'));
+const { name, version } = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8'));
 const bundled = JSON.parse(readFileSync(join(root, 'dist', 'third-party.json'), 'utf8'));
-const tgz = join(root, `uvd-${version}.tgz`);
+// `npm pack` names a scoped package's tarball without the `@` and with `-` for the `/`:
+// @ultravioletadao/uvd 0.1.0 is ultravioletadao-uvd-0.1.0.tgz. The wheel keeps the PyPI name, uvd.
+const tgzName = `${name.replace(/^@/, '').replace('/', '-')}-${version}.tgz`;
+const tgz = join(root, tgzName);
 const wheel = join(root, 'dist', `uvd-${version}-py3-none-any.whl`);
 
 const read = (command, args) => execFileSync(command, args, { encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 });
 const notices = {
-  [`uvd-${version}.tgz`]: () => read('tar', ['-xzOf', tgz, 'package/dist/THIRD_PARTY_LICENSES.txt']),
+  [tgzName]: () => read('tar', ['-xzOf', tgz, 'package/dist/THIRD_PARTY_LICENSES.txt']),
   [`uvd-${version}-py3-none-any.whl`]: () => read('unzip', ['-p', wheel, 'uvd/_bundle/THIRD_PARTY_LICENSES.txt']),
 };
 

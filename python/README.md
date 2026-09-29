@@ -1,7 +1,7 @@
 # uvd
 
 The Ultravioleta DAO command line, packaged for Python tools (`pip`, `pipx`, `uvx`). It is the same
-CLI as the npm package `uvd`: a single Node.js bundle, run by the Node.js that the
+CLI as the npm package `@ultravioletadao/uvd`: a single Node.js bundle, run by the Node.js that the
 [`nodejs-wheel-binaries`](https://pypi.org/project/nodejs-wheel-binaries/) wheel provides, so no
 separate Node.js install is needed.
 

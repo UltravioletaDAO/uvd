@@ -93,11 +93,13 @@ jobs:
       - name: "Criterion: npx the tarball, search wallet has results"
         run: |
           version=$(node -p "require('./package.json').version")
-          n=$(npx --yes "./uvd-$version.tgz" search wallet --json | jq length)
+          # npm pack names the scoped @ultravioletadao/uvd tarball ultravioletadao-uvd-<version>.tgz.
+          tgz="./ultravioletadao-uvd-$version.tgz"
+          n=$(npx --yes "$tgz" search wallet --json | jq length)
           echo "uvd search wallet --json | jq length = $n"
           test "$n" -gt 0
           echo "uvd search reputacion --json (stdout | jq length, then stderr):"
-          npx --yes "./uvd-$version.tgz" search reputacion --json | jq length
+          npx --yes "$tgz" search reputacion --json | jq length
 
       - name: "Criterion: uvx the wheel, --version"
         run: |

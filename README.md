@@ -5,14 +5,17 @@ The Ultravioleta DAO command line. Version 0.1 searches
 through Emporium's counter. No wallet, no keys: paid, writing and authenticated calls come later.
 
 ```sh
-npx uvd search wallet               # tools of the stack and third-party services
-npx uvd tools                       # Emporium's own MCP tools
-npx uvd tools describe-net          # the tools of one service in Emporium's catalog
-npx uvd call emporium_superficies   # call a free read-only tool through the counter
+npx @ultravioletadao/uvd search wallet               # tools of the stack and third-party services
+npx @ultravioletadao/uvd tools                       # Emporium's own MCP tools
+npx @ultravioletadao/uvd tools describe-net          # the tools of one service in Emporium's catalog
+npx @ultravioletadao/uvd call emporium_superficies   # call a free read-only tool through the counter
 ```
 
-The same CLI is on PyPI: `uvx uvd …` (it brings its own Node.js through `nodejs-wheel-binaries`;
-the first run downloads about 60 MB).
+`npm i -g @ultravioletadao/uvd` installs it; the command is `uvd` either way. On npm the package
+is scoped because the registry refused the bare name `uvd` as too close to existing packages.
+
+The same CLI is on PyPI as `uvd`: `uvx uvd …` (it brings its own Node.js through
+`nodejs-wheel-binaries`; the first run downloads about 60 MB).
 
 Output is a table on a terminal and JSON otherwise (or with `--json`). Agents: read
 [AGENTS.md](AGENTS.md) for the JSON contract and the exit codes.
@@ -26,7 +29,7 @@ Node.js 24. `npm ci`, then:
 | `npm run typecheck` / `npm run lint` | TypeScript and Biome |
 | `npm test` | The suite, offline, against a local server that serves recorded fixtures |
 | `npm run build` | Bundles `dist/uvd.mjs` with esbuild |
-| `npm pack` | `uvd-0.1.0.tgz` |
+| `npm pack` | `ultravioletadao-uvd-0.1.0.tgz` |
 | `npm run build:wheel` | The PyPI wheel in `dist/` (needs [uv](https://docs.astral.sh/uv/)) |
 | `npm run check:artifacts` | Checks the tarball and the wheel carry the third-party licenses |
 | `npm run fixtures:serve` | Serves the recorded fixtures locally, for trying uvd offline |

@@ -4,7 +4,9 @@
 [Emporium](https://emporium.ultravioletadao.xyz), lists MCP tools and calls **free, read-only**
 tools through Emporium's counter (`/mostrador/mcp`). It has no wallet and no credentials.
 
-Install: `npx uvd …` (npm) or `uvx uvd …` (PyPI). Same CLI, same output.
+Install: `npx @ultravioletadao/uvd …` or `npm i -g @ultravioletadao/uvd` (npm), or `uvx uvd …`
+(PyPI). Same CLI, same output; the installed command is `uvd`. The npm package is scoped because
+npm refused the bare name `uvd` as too close to existing packages.
 
 ## Output contract
 
